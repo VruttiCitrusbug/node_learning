@@ -1,0 +1,4 @@
+npm i nodemon@1.18.5 -g     install global package
+ensure by nodemon -v
+instant reflect program not re erxecute
+ctrl+c to get back terminal 
