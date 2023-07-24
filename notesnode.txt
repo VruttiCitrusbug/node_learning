@@ -2,3 +2,39 @@ npm i nodemon@1.18.5 -g     install global package
 ensure by nodemon -v
 instant reflect program not re erxecute
 ctrl+c to get back terminal 
+
+
+command line input--> node file1.js vrutti here vrutti stands as cmd arg
+console.log(process.argv) ==> 
+[
+  'C:\\Program Files\\nodejs\\node.exe', ==> path where nodejs is excecuted from your machine 
+  'C:\\Users\\Vrutti\\Desktop\\node_learning\\notes\\file1.js' ==> where excetly file is 
+  '1'
+]
+to pass 2 arguments 
+PS C:\Users\Vrutti\Desktop\node_learning\notes> node get_arg.js Hello bye
+[
+  'C:\\Program Files\\nodejs\\node.exe',
+  'C:\\Users\\Vrutti\\Desktop\\node_learning\\notes\\get_arg.js',
+  'Hello',
+  'bye'
+]
+
+console.log(yargs.argv)
+node get_arg.js Hello --title="thing bye"
+[
+  'C:\\Program Files\\nodejs\\node.exe',
+  'C:\\Users\\Vrutti\\Desktop\\node_learning\\notes\\get_arg.js',
+  'Hello',
+  '--title=thing bye'
+]
+yargs => { _: [ 'Hello' ], title: 'thing bye', '$0': 'get_arg.js' }
+
+links.mead.io/json-sample
+
+
+weather api open with firefox for not get secure connection
+http://api.weatherstack.com/current?access_key=9d9bf5997ac8147126085a56f8374d9d&query=ahmedabad
+
+init with answer yes to all the questions
+npm init -y 
