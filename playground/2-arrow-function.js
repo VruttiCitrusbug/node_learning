@@ -2,7 +2,7 @@
 const square = (x) => x*x
 console.log(square(2))
 
-//function allow to access this
+//function allow to access this--keyword
 const event = {
     name: 'birthday',
     printGaustlst: function(){
