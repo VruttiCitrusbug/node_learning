@@ -2,7 +2,8 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const publicDirectoryPath = path.join(__dirname, '../public');
-
+//here statics are collected jut like python manage.py collectstatic, now to get any static path we have to write path after public folder 
+//current path of staTIC SET AS C:\Users\Vrutti\Desktop\node_learning\web-server\public
 app.use(express.static(publicDirectoryPath));
 // http://localhost:3000/about.html to work 
 // http://localhost:3000/  --> render index.html
@@ -30,4 +31,5 @@ app.listen(3000, () => {
 // console.log(__dirname) --> C:\Users\Vrutti\Desktop\node_learning\web-server\src
 // console.log(__filename) --> C:\Users\Vrutti\Desktop\node_learning\web-server\src\app.js
 // console.log(path.join(__dirname,"../public/index.html"))
-// C:\Users\Vrutti\Desktop\node_learning\web-server\public\index.html
+// C:\Users\Vrutti\Desktop\node_learning\web-server\public\index.html 
+// current directory and file name by __dirname __filename
