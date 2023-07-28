@@ -9,6 +9,7 @@ const user = {
 }
 console.log(user)//{ name: 'vrutti', age: 27, location: 'ahmedabad' }
 
+//object short hand propery
 const user2 = {
     name1,
     age,
@@ -16,6 +17,7 @@ const user2 = {
 }
 console.log(user2)//{ name1: 'vrutti', age: 27, location: 'ahmedabad' }
 
+//object destructure
 const {name,location,fake} = user 
 //const {name,location,fake} = user2
 //same define again it cause error

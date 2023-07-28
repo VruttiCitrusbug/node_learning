@@ -12,6 +12,8 @@ const event = {
 }
 //while arrow function not
 event.printGaustlst()
+// Here, printGaustlst is a regular function in the event object. Inside the function,
+//  this refers to the object itself (event), allowing you to access the name property using this.name.
 
 const event2 = {
     name: 'birthday',
@@ -21,6 +23,12 @@ const event2 = {
     }
 }
 event2.printGaustlst()
+// In this case, printGaustlst is an arrow function within the event2 object. 
+// Arrow functions do not have their own this, so the this inside the arrow function
+// refers to the surrounding context, which is the global context (in Node.js)
+// or the window object (in the browser). As a result, this.name is undefined.
+
+
 // available sytex when we set up method in object
 const event3 = {
     name: 'birthday',
@@ -42,6 +50,8 @@ const event4 = {
     }
 }
 event4.printGaustlst()
+// This is a shorter syntax to define the object method printGaustlst. 
+// The function has access to the object's properties using this, just like the first example.
 
 const event5 = {
     name: 'birthday',
@@ -55,12 +65,16 @@ const event5 = {
     }
 }
 event5.printGaustlst()
+// In this case, the forEach callback is a regular function, which creates its own this context. 
+// Inside the callback, this refers to the callback function itself, not the event4 object. As a result, this.name is undefined.
 
+
+//TODO
 const event6 = {
     name: 'birthday',
     lst : ['a','b','c'],
     printGaustlst(){
-        //wwe can accss byu pass this.lst
+        //wwe can accss by pass this.lst
         this.lst.forEach((name) => {
             console.log(name + " " + this.name)
         })
