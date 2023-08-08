@@ -14,6 +14,7 @@ const event = {
 event.printGaustlst()
 // Here, printGaustlst is a regular function in the event object. Inside the function,
 //  this refers to the object itself (event), allowing you to access the name property using this.name.
+//function() always refer caller object as this
 
 const event2 = {
     name: 'birthday',
@@ -52,7 +53,7 @@ const event4 = {
 event4.printGaustlst()
 // This is a shorter syntax to define the object method printGaustlst. 
 // The function has access to the object's properties using this, just like the first example.
-
+//In this example, the printGaustlst method uses a regular function as a callback for forEach. Regular functions have their own context for this, which means that this inside the callback function refers to the function itself rather than the event4 object. 
 const event5 = {
     name: 'birthday',
     lst : ['a','b','c'],
@@ -81,3 +82,4 @@ const event6 = {
     }
 }
 event6.printGaustlst()
+// In this example, the printGaustlst method uses an arrow function as a callback for forEach. Arrow functions do not have their own this context; instead, they capture the this value from the surrounding context. So, this inside the arrow function refers to the event6 object, allowing direct access to its properties, such as this.name. 

@@ -41,3 +41,7 @@ npm init -y
 
 to restart server if changes made to hbs or js file 
 nodemon src/app.js -e js,hbs
+
+path where data is stay
+C:\Users\Vrutti\mongodb\bin\mongod.exe --dbpath=/Users/Vrutti/mongodb-data 
+to execute the db
