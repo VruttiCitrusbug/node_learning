@@ -45,3 +45,7 @@ nodemon src/app.js -e js,hbs
 path where data is stay
 C:\Users\Vrutti\mongodb\bin\mongod.exe --dbpath=/Users/Vrutti/mongodb-data 
 to execute the db
+other validators:
+https://www.npmjs.com/package/validator
+
+set of predefine operation
