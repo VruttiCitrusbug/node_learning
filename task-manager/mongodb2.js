@@ -59,35 +59,65 @@ async function main() {
     // }).catch((err)=>{
     //     console.log(err)
     // })
-    // const data = await db.collection('users').findOne( { name: 'Parth'})
-    // console.log(data)
 
     //UPDATEALL
 
-    db.collection('users').updateMany(
-    {
-        _id: new ObjectId('64d1c7ef2eb20c33bf5863db')
-    },
-    {
-        $set:{
-            name:"Parth"
-        }
-        
-    }).then((res)=>{
-    console.log(res)
+    // db.collection('users').updateMany(
     // {
-    //     acknowledged: true,
-    //     modifiedCount: 1,
-    //     upsertedId: null,
-    //     upsertedCount: 0,
-    //     matchedCount: 1
-    //   }
-    }).catch((err)=>{
-        console.log(err)
-    })
-    const data = await db.collection('users').findOne( { name: 'Parth'})
-    console.log(data)
+    //     name: 'Vrutti'
+    // },
+    // {
+    //     $set:{
+    //         name:"Parth"
+    //     }
+        
+    // }).then((res)=>{
+    // console.log(res)
+    // // {
+    // //     acknowledged: true,
+    // //     modifiedCount: 1,
+    // //     upsertedId: null,
+    // //     upsertedCount: 0,
+    // //     matchedCount: 1
+    // //   }
+    // }).catch((err)=>{
+    //     console.log(err)
+    // })
 
+    //DELETE ONE
+    // db.collection('users').deleteOne(
+    //     {
+    //         _id: new ObjectId('64d1c7ef2eb20c33bf5863db')
+    //     }).then((res)=>{
+    //     console.log(res)
+    //     // {
+    //     //     acknowledged: true,
+    //     //     modifiedCount: 1,
+    //     //     upsertedId: null,
+    //     //     upsertedCount: 0,
+    //     //     matchedCount: 1
+    //     //   }
+    //     }).catch((err)=>{
+    //         console.log(err)
+    //         //{ acknowledged: true, deletedCount: 1 }
+    //     })
+
+    // db.collection('users').deleteMany(
+    //     {
+    //         name: 'Jayshree'
+    //     }).then((res)=>{
+    //     console.log(res)
+    //     // {
+    //     //     acknowledged: true,
+    //     //     modifiedCount: 1,
+    //     //     upsertedId: null,
+    //     //     upsertedCount: 0,
+    //     //     matchedCount: 1
+    //     //   }
+    //     }).catch((err)=>{
+    //         console.log(err)
+    //         //{ acknowledged: true, deletedCount: 4 }
+    //     })
 }
  
 main().catch((error)=>{console.log(error)});
