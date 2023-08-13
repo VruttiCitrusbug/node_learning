@@ -43,8 +43,7 @@ to restart server if changes made to hbs or js file
 nodemon src/app.js -e js,hbs
 
 path where data is stay
-C:\Users\Vrutti\mongodb\bin\mongod.exe --dbpath=/Users/Vrutti/mongodb-data 
-to execute the db
+cto execute the db
 other validators:
 https://www.npmjs.com/package/validator
 
@@ -52,3 +51,14 @@ FIND ONE FIND ALL TYPE QUERIES
 https://mongoosejs.com/docs/queries.html
 
 set of predefine operation
+
+
+PS C:\Program Files\MongoDB\Server\6.0\bin> mongod.exe --dbpath=C:/Users/Administrator/Desktop/db   
+run command to connect db 
+without tjis you may fatch data but unable to perform an operation
+
+
+PS C:\> cd '.\Program Files\'                                
+PS C:\Program Files> cd .\MongoDB\        
+PS C:\Program Files\MongoDB> cd .\Server\6.0\bin\
+PS C:\Program Files\MongoDB\Server\6.0\bin> mongod.exe --dbpath=C:/Users/Administrator/Desktop/db
