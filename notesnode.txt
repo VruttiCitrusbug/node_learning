@@ -62,3 +62,9 @@ PS C:\> cd '.\Program Files\'
 PS C:\Program Files> cd .\MongoDB\        
 PS C:\Program Files\MongoDB> cd .\Server\6.0\bin\
 PS C:\Program Files\MongoDB\Server\6.0\bin> mongod.exe --dbpath=C:/Users/Administrator/Desktop/db
+
+
+
+cmd cd "Program Files"
+cd .\MongoDB\Server\6.0\bin\
+>mongod.exe --dbpath=C:/Users/Vrutti/Desktop/db
