@@ -1,10 +1,19 @@
 const express = require('express')
 const router = new express.Router()
 const User = require('../models/user')
-
+const auth = require('../../middleware/auth')
+// router.use((req,res,next)=>{
+//     if(req.method === 'GET'){
+//         res.send("unable")
+//     }else{
+//         next()
+//     }
+//     // console.log(req.method,req.path)
+//     next()
+// })
 
 //get all objects 200 ok 404 not found
-router.get('/users',async (req,res)=>{
+router.get('/users',auth,async (req,res)=>{
     try {
         const user = await User.find({})
         res.send(user)

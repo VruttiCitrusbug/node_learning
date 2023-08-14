@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
-
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 // const User = mongoose.model('User',{
 //     name:{
 //         type:String,
@@ -39,6 +40,7 @@ const userschema = new mongoose.Schema(
         },
         email:{
             type:String,
+            unique:true,
             require:true,
             trim:true,
             lowercase:true,
@@ -58,13 +60,46 @@ const userschema = new mongoose.Schema(
                     throw new Error('Not valid PASS')
                 }
             }
-        }
+        },tokens:[{
+            token:{
+                type:String,
+                require:true
+            }
+        }]
     }
 )
 
+userschema.statics.findByCredentials = async (email,password) =>{
+    const user = await User.findOne({email})
+
+    if(!user){
+        throw new Error('unable to log in')
+    }
+    const ismatch = await bcrypt.compare(password,user.password)
+
+    if(!ismatch){
+        throw new Error('unable to log in')
+    }
+    return user
+}
+
+userschema.methods.generateAuthToken = async function() {
+    const user = this
+    console.log(user._id.toString())//64d9b43381ade954a12297b5
+    const token = await jwt.sign({_id:user._id.toString()},'thisismynewtoken', {expiresIn:'7 days'})
+    console.log(token)
+    user.tokens = user.tokens.concat({ token })
+    //.concat() method to add a new token to the user.tokens array.
+    console.log(user.tokens)
+    await user.save()
+    return token
+}
+
 userschema.pre('save',async function(next) {
     const user = this
-    console.log("BEFORE SAVE")
+    console.log(user.isModified('password'))
+    if(user.isModified('password'))
+    {user.password=await bcrypt.hash(user.password,8)}
     next()
 })
 
