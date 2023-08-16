@@ -7,7 +7,7 @@ const { request } = require('express')
 const auth = require('../middleware/auth')
 const app = express()
 const port = process.env.PORT || 3000
-
+const multer = require('multer')
 app.use(express.json()) // to json parser 
 app.use(userroute)
 
@@ -34,19 +34,19 @@ app.post('/users',async (req, res) => {
 
         // {
         //     "user": {
-        //         "name": "aa",
-        //         "email": "aa@g.co",
-        //         "password": "$2a$08$LUlrcYIKJ.gqNqokV2d6Y.RupDYktT6YwYguJGSGXcy4gLo8qqC62",
-        //         "_id": "64d9f1e2efe277efb77c1f8d",
+        //         "name": "ff",
+        //         "email": "ff@gm.co",
+        //         "password": "$2a$08$Cm2vnu.4R8rSniCorWs1BeXa1nN9HzbJh94GxWlkxbZCkHFI5d6n.",
+        //         "_id": "64da55bf968f02befaf4fb15",
         //         "tokens": [
         //             {
-        //                 "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGQ5ZjFlMmVmZTI3N2VmYjc3YzFmOGQiLCJpYXQiOjE2OTIwMDQ4MzQsImV4cCI6MTY5MjYwOTYzNH0.yEFurY3yIFXNNfTYzV9wx0VyEIAaPtLK4X98z-Apyws",
-        //                 "_id": "64d9f1e2efe277efb77c1f8e"
+        //                 "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGRhNTViZjk2OGYwMmJlZmFmNGZiMTUiLCJpYXQiOjE2OTIwMzAzOTksImV4cCI6MTY5MjYzNTE5OX0.ueCZBCR_UjCoi8Ekp25I4P_iU4qM8WPmCbKLgGavV5Y",
+        //                 "_id": "64da55bf968f02befaf4fb16"
         //             }
         //         ],
         //         "__v": 0
         //     },
-        //     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGQ5ZjFlMmVmZTI3N2VmYjc3YzFmOGQiLCJpYXQiOjE2OTIwMDQ4MzQsImV4cCI6MTY5MjYwOTYzNH0.yEFurY3yIFXNNfTYzV9wx0VyEIAaPtLK4X98z-Apyws"
+        //     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGRhNTViZjk2OGYwMmJlZmFmNGZiMTUiLCJpYXQiOjE2OTIwMzAzOTksImV4cCI6MTY5MjYzNTE5OX0.ueCZBCR_UjCoi8Ekp25I4P_iU4qM8WPmCbKLgGavV5Y"
         // }
     }
     catch(e){
@@ -55,11 +55,11 @@ app.post('/users',async (req, res) => {
 
 })
 
-app.post('/users/login',auth,async (req, res) => {
+app.post('/users/login',async (req, res) => {
     try{
         const user = await User.findByCredentials(req.body.email,req.body.password)
         const token = await user.generateAuthToken()
-        res.send({user,token})
+        res.send({user:await user.getPublicProfile(),token})
         // {
         //     "user": {
         //         "_id": "64d9b43381ade954a12297b5",
@@ -76,6 +76,19 @@ app.post('/users/login',auth,async (req, res) => {
         //     },
         //     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGQ5YjQzMzgxYWRlOTU0YTEyMjk3YjUiLCJpYXQiOjE2OTIwMDQzMjEsImV4cCI6MTY5MjYwOTEyMX0.OhG59q0HTkwYe1MTOb3dC9p_ma3qSgeEcwWSUCEywJ8"
         // }
+
+        //hide data
+        // {
+        //     "user": {
+        //         "_id": "64da5c1066f2fab960780f40",
+        //         "name": "ff",
+        //         "email": "ff@gm.co",
+        //         "__v": 13
+        //     },
+        //     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGRhNWMxMDY2ZjJmYWI5NjA3ODBmNDAiLCJpYXQiOjE2OTIwMzUyMjMsImV4cCI6MTY5MjY0MDAyM30.mi8GVda3dYyFKyH3cHrHEOxzxrzTW_afdKL5guDkV4Q"
+        // }
+
+
     }catch{
         res.status(400).send()
     }
@@ -84,13 +97,13 @@ app.post('/users/login',auth,async (req, res) => {
 app.post('/users/logout',auth,async (req,res) => {
     
     try{
-        req.user.token = req.user.tokens.filter((token)=>{
-            console.log(token.token)
+        req.user.tokens = req.user.tokens.filter((token)=>{
             return token.token !== req.token
         })
-        console.log(req.user.token)
+        console.log(req.user.tokens,"PPPPPPPPPPP")
         await req.user.save()
-        res.send(req.user)
+        console.log(req.user,"LLLLLLLLLLLLLL")
+        res.send()
         // {
         //     "_id": "64d9f1e2efe277efb77c1f8d",
         //     "name": "aa",
@@ -105,36 +118,48 @@ app.post('/users/logout',auth,async (req,res) => {
         //     "__v": 0
         // }
     }catch(e){
-        res.status(400).send()
+        res.status(400).send(e)
     }
 })
+
+app.post('/users/logoutAll',auth,async (req,res) => {
+    try{
+        req.user.token = []
+        await request.user.save()
+        res.send()
+    }
+    catch(e){
+        res.status(500).send()
+    }
+})
+
 // //get all objects 200 ok 404 not found
-// app.get('/users',async (req,res)=>{
-//     try {
-//         const user = await User.find({})
-//         res.send(user)
-//         //[
-//         //     {
-//         //         "_id": "64d735886d133578ece84d22",
-//         //         "name": "vrutti",
-//         //         "age": 20,
-//         //         "email": "vp@g.co",
-//         //         "password": "aa12322a",
-//         //         "__v": 0
-//         //     },
-//         //     {
-//         //         "_id": "64d8ee062fbbe9e0fde6dc9e",
-//         //         "name": "me",
-//         //         "email": "hehe@gm.co",
-//         //         "password": "mememem",
-//         //         "__v": 0
-//         //     }
-//         // ]
-//     }
-//     catch(e){
-//         res.status(500).send(e)
-//     }
-// })
+app.get('/users',auth,async (req,res)=>{
+    try {
+        const user = await User.find({})
+        res.send(user)
+        //[
+        //     {
+        //         "_id": "64d735886d133578ece84d22",
+        //         "name": "vrutti",
+        //         "age": 20,
+        //         "email": "vp@g.co",
+        //         "password": "aa12322a",
+        //         "__v": 0
+        //     },
+        //     {
+        //         "_id": "64d8ee062fbbe9e0fde6dc9e",
+        //         "name": "me",
+        //         "email": "hehe@gm.co",
+        //         "password": "mememem",
+        //         "__v": 0
+        //     }
+        // ]
+    }
+    catch(e){
+        res.status(500).send(e)
+    }
+})
 
 // //To get specific objects
 // app.get('/users/:id',async (req,res)=>{
@@ -303,3 +328,40 @@ app.patch('/users/:id',async (req,res)=>{
         res.status(500).send(e)
     }
 })
+
+upload = multer({
+    dest:'avatar',
+    limits:{
+        fileSize:1000000
+    },
+    fileFilter(req,file,cb){
+        if(!file.originalname.match(/\.(jpg|jpeg|png)$/)){
+            console.log(true)
+            return cb(new Error('Please upload Image.'))
+        }
+        cb(undefined,true)
+    }
+})
+
+const errormiddlewear = (req,res,next) => {
+    throw new Error('From middlewear')
+}
+
+// app.post('/users/me/avatar',errormiddlewear,(req,res) => {
+//     res.send()
+// }
+// // ,(err,req,res,next)=>{
+// //     res.status(400).send({error:error.message})
+// // }
+// )
+
+app.post('/users/me/avatar',auth,upload.single('avatar'),async (req,res) => {
+    req.user.avatar = req.file.buffer
+    console.log(req.file)
+    user = await req.user.save()
+    res.send(user)
+}
+,(err,req,res,next)=>{
+    res.status(400).send({error:err.message})
+}
+)

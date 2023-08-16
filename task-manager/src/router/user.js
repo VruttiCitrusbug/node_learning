@@ -61,4 +61,26 @@ router.get('/users/:id',async (req,res)=>{
 
 })
 
+router.delete('/users/me',auth,async (req,res)=>{
+    
+    try {
+        await User.findByIdAndRemove(req.user._id)
+        res.send(req.user)
+    }
+    catch(e){
+        res.status(500).send(e)
+    }
+})
+
+router.patch('/users/me',auth,async (req,res)=>{
+    
+    try {
+        const user = await User.findByIdAndUpdate(req.user._id,req.body,{new:true,runValidators:true})//if not exis add new
+        res.send(user)
+    }
+    catch(e){
+        res.status(500).send(e)
+    }
+})
+
 module.exports = router

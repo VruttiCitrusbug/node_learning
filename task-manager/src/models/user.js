@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const Task = require('../db/mongoose-express')
 // const User = mongoose.model('User',{
 //     name:{
 //         type:String,
@@ -40,7 +41,7 @@ const userschema = new mongoose.Schema(
         },
         email:{
             type:String,
-            unique:true,
+            // unique:true,
             require:true,
             trim:true,
             lowercase:true,
@@ -65,8 +66,24 @@ const userschema = new mongoose.Schema(
                 type:String,
                 require:true
             }
-        }]
+        }],
+        avatar:{
+            type:Buffer
+        }
+    },{
+        timestamps:true
     }
+    // { by add timestamp
+    //     "name": "ii",
+    //     "email": "ii@gm.co",
+    //     "password": "$2a$08$1m51HGIFjyzUTldCOpYygepU4E32zLvdtE11.KKDqt5iozoH89zJa",
+    //     "_id": "64da870cf0e7f8bdb949d5bd",
+    //     "tokens": [],
+    //     "createdAt": "2023-08-14T19:57:00.756Z",
+    //     "updatedAt": "2023-08-14T19:57:00.756Z",
+    //     "__v": 0
+    // }
+    
 )
 
 userschema.statics.findByCredentials = async (email,password) =>{
@@ -95,6 +112,18 @@ userschema.methods.generateAuthToken = async function() {
     return token
 }
 
+userschema.methods.getPublicProfile = async function() {
+    
+    const user = this
+    const userobj = user.toObject()
+
+    delete userobj.password
+    delete userobj.tokens
+
+    return userobj
+}
+
+
 userschema.pre('save',async function(next) {
     const user = this
     console.log(user.isModified('password'))
@@ -103,5 +132,17 @@ userschema.pre('save',async function(next) {
     next()
 })
 
+userschema.virtual('tasks',{
+    ref:'Task',
+    localField:'_id',
+    foreignField:'owner'
+})
+userschema.set('strictPopulate', false);
+    
+userschema.pre('remove',async function(){
+    const user = this
+    await Task.deleteMany({owner:user._id})
+    next()
+})
 const User = mongoose.model('User',userschema)
 module.exports=User
