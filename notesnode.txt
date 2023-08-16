@@ -58,11 +58,20 @@ run command to connect db
 without tjis you may fatch data but unable to perform an operation
 
 
+Download image
+https://links.mead.io/files
+
+
+
 PS C:\> cd '.\Program Files\'                                
 PS C:\Program Files> cd .\MongoDB\        
 PS C:\Program Files\MongoDB> cd .\Server\6.0\bin\
 PS C:\Program Files\MongoDB\Server\6.0\bin> mongod.exe --dbpath=C:/Users/Administrator/Desktop/db
 
+
+cd ../../../..
+cd "Program Files"\MongoDB\Server\6.0\bin\
+mongod.exe --dbpath=C:/Users/Vrutti/Desktop/db
 
 
 cmd cd "Program Files"
