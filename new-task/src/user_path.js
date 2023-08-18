@@ -20,10 +20,13 @@ app.use(userroute)
 const avatarroute = require('./user_avatar_path')
 app.use(avatarroute)
 
+const {sendwelcome,cancelemail} = require('../emails/account')
+
 app.post('/users',async (req, res) => {
     const user = new User(req.body)
     try{
         await user.save()
+        sendwelcome(user.name,user.email)
         res.status(201).send(user)
 
     }catch(error){
@@ -74,6 +77,7 @@ app.delete('/users/:id',async (req,res)=>{
         const user = await User.findByIdAndDelete(req.params.id)
         if(!user){
             res.status(400).send({error:"user not exist."})
+            cancelemail(user.email,user.name)
         }
         res.send({success:"user deleted successfully."})
     }
@@ -108,11 +112,6 @@ app.patch('/users/:id',async (req,res)=>{
         res.status(500).send({error:e})
     }
 })
-
-//USER FILE UPLOAD
-
-
-
 
 const port = process.env.PORT || 3000
 app.listen(port,()=>{
