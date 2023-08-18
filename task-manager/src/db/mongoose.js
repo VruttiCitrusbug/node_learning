@@ -61,42 +61,42 @@ mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api');
 
 //validate model
 
-// const User = mongoose.model('User',{
-//     name:{
-//         type:String,
-//         require:true
-//     },
-//     age:{
-//         type:Number,
-//         validate(val){
-//             if(val < 0){
-//                 throw new Error('Age must be a positive numer')
-//             }
-//         }
-//     },
-//     email:{
-//         type:String,
-//         require:true,
-//         trim:true,
-//         lowercase:true,
-//         validate(val){
-//             if(!validator.isEmail(val)){
-//                 throw new Error('Not valid')
-//             }
-//         }
-//     }
-// })
-// const i=new User({
-//         name:'ME',
-//         email:'v@g.co',
-//         age:-1
-//     })
-// i.save().then((tsk)=>{
-// console.log(tsk)
-// }).catch((err)=>{
-//     console.log(err)
-//      // User validation failed: age: Age must be a positive numer
-// })
+const User = mongoose.model('User',{
+    name:{
+        type:String,
+        require:true
+    },
+    age:{
+        type:Number,
+        validate(val){
+            if(val < 0){
+                throw new Error('Age must be a positive numer')
+            }
+        }
+    },
+    email:{
+        type:String,
+        require:true,
+        trim:true,
+        lowercase:true,
+        validate(val){
+            if(!validator.isEmail(val)){
+                throw new Error('Not valid')
+            }
+        }
+    }
+})
+const i=new User({
+        name:'ME',
+        email:'v@g.co',
+        age:-1
+    })
+i.save().then((tsk)=>{
+console.log(tsk)
+}).catch((err)=>{
+    console.log(err)
+     // User validation failed: age: Age must be a positive numer
+})
 
 
 //Trim lowercase

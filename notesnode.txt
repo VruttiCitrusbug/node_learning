@@ -77,3 +77,5 @@ mongod.exe --dbpath=C:/Users/Vrutti/Desktop/db
 cmd cd "Program Files"
 cd .\MongoDB\Server\6.0\bin\
 >mongod.exe --dbpath=C:/Users/Vrutti/Desktop/db
+
+External Services: If you're using MongoDB Atlas or a similar cloud-based MongoDB service, the actual database server might be managed by the service provider, and you may not directly interact with the mongod.exe process. In such cases, the service handles the server-side operations.

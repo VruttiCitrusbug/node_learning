@@ -3,6 +3,7 @@ const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const Task = require('../db/mongoose-express')
+
 // const User = mongoose.model('User',{
 //     name:{
 //         type:String,
@@ -37,12 +38,11 @@ const userschema = new mongoose.Schema(
     {
         name:{
             type:String,
-            require:true
+            required:true
         },
         email:{
             type:String,
-            // unique:true,
-            require:true,
+            required:true,
             trim:true,
             lowercase:true,
             validate(val){
@@ -53,8 +53,8 @@ const userschema = new mongoose.Schema(
         },
         password:{
             type:String,
-            require:true,
-            minlength: 7,
+            required:true,
+            minlength: 2,
             trim:true,
             validate(val){
                 if(val.toLowerCase().includes("pass")){

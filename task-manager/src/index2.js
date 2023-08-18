@@ -7,10 +7,11 @@ const { request } = require('express')
 const auth = require('../middleware/auth')
 const app = express()
 const port = process.env.PORT || 3000
+const sharp = require('sharp')
 const multer = require('multer')
 app.use(express.json()) // to json parser 
 app.use(userroute)
-
+const fs = require('fs');
 
 //POST Add user success: 201 fail 400 -- user side request frame problem or 409 -- conflict with resource 
 app.post('/users',async (req, res) => {
@@ -329,6 +330,20 @@ app.patch('/users/:id',async (req,res)=>{
     }
 })
 
+
+const errormiddlewear = (req,res,next) => {
+    throw new Error('From middlewear')
+}
+
+// app.post('/users/me/avatar',errormiddlewear,(req,res) => {
+//     res.send()
+// }
+// // ,(err,req,res,next)=>{
+// //     res.status(400).send({error:error.message})
+// // }
+// )
+
+// const storage = multer.memoryStorage()
 upload = multer({
     dest:'avatar',
     limits:{
@@ -343,23 +358,102 @@ upload = multer({
     }
 })
 
-const errormiddlewear = (req,res,next) => {
-    throw new Error('From middlewear')
-}
+// app.post('/users/me/avatar',auth,upload.single('avatar'),async (req,res) => {
+//     console.log(req.file)
+//     // {
+//     //     fieldname: 'avatar',
+//     //     originalname: '48831948-4781-4BEC-B305-06A44ED0D4F6.jpg',
+//     //     encoding: '7bit',
+//     //     mimetype: 'image/jpeg',
+//     //     buffer: <Buffer ff d8 ff e0 00 10 4a 46 49 46 00 01 01 00 00 48 00 48 00 00 ff e1 00 4c 45 78 69 66 00 00 4d 4d 00 2a 00 00 00 08 00 02 01 12 00 03 00 00 00 01 00 01 ... 158743 more bytes>,
+//     //     size: 158793
+//     //   }
+//     // {
+//     //     fieldname: 'avatar',
+//     //     originalname: '48831948-4781-4BEC-B305-06A44ED0D4F6.jpg',
+//     //     encoding: '7bit',
+//     //     mimetype: 'image/jpeg',
+//     //     destination: 'avatar',
+//     //     filename: 'b050ac0eee9057c32a81f1629a51acb9',
+//     //     path: 'avatar\\b050ac0eee9057c32a81f1629a51acb9',
+//     //     size: 158793
+//     //   }
 
-// app.post('/users/me/avatar',errormiddlewear,(req,res) => {
-//     res.send()
+
+//     // Read the image file in binary mode
+//     fs.readFile(req.file.path,async (err, data) => {
+//     if (err) {
+//         console.error(err);
+//         return res.status(500).send();
+//     }
+    
+//     // Convert the binary data to base64
+//     const base64Data = data.toString('base64');
+//     // console.log(base64Data)
+//     req.user.avatar = base64Data;
+//     await req.user.save()
+//     console.log(req.user)
+//     return res.send(req.user)
+//     });
+//     // {
+//     //     "_id": "64d9b43381ade954a12297b5",
+//     //     "name": "rrrr",
+//     //     "email": "jj@g.co",
+//     //     "password": "$2a$08$S8vQTy0FyauUP5yewaOf1ON3B/YIm2zm1TqwihYS/89HRNQwxyxom",
+//     //     "__v": 1,
+//     //     "tokens": [
+//     //         {
+//     //             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGQ5YjQzMzgxYWRlOTU0YTEyMjk3YjUiLCJpYXQiOjE2OTIwMDQzMjEsImV4cCI6MTY5MjYwOTEyMX0.OhG59q0HTkwYe1MTOb3dC9p_ma3qSgeEcwWSUCEywJ8",
+//     //             "_id": "64d9efe1167d21ae0813891a"
+//     //         }
+//     //     ]
+//     // }
 // }
-// // ,(err,req,res,next)=>{
-// //     res.status(400).send({error:error.message})
-// // }
+// ,(err,req,res,next)=>{
+//     res.status(400).send({error:err.message})
+// }
 // )
 
+app.get('/avatar/:id',async (req,res)=>{
+    try{
+        const user = await User.findById(req.params.id)
+        if(!user || !user.avatar){
+            throw new Error("err")
+        }
+        // res.set('Content-Type','application/json') default
+        res.set('Content-Type','image/png')
+        res.send(user.avatar)
+    }
+    catch(e){
+        res.status(404).send("err")
+    }
+})
+
+app.delete('/users/me/avatar',auth,async (req,res) => {
+    req.user.avatar = undefined
+    await req.user.save()
+    return res.send(req.user)
+})
 app.post('/users/me/avatar',auth,upload.single('avatar'),async (req,res) => {
-    req.user.avatar = req.file.buffer
+
     console.log(req.file)
-    user = await req.user.save()
-    res.send(user)
+    buffer = await sharp(request.file.buffer).resize({width:250,height:250}).png().toBuffer()
+    request.user.avatar = buffer
+    // fs.readFile(req.file.path,async (err, data) => {
+    // if (err) {
+    //     console.error(err);
+    //     return res.status(500).send();
+    // }
+    
+    // // Convert the binary data to base64
+    // const base64Data = data.toString('base64');
+    // // console.log(base64Data)
+    // req.user.avatar = base64Data;
+    await req.user.save()
+    // console.log(req.user)
+    return res.send(req.user)
+    // });
+
 }
 ,(err,req,res,next)=>{
     res.status(400).send({error:err.message})

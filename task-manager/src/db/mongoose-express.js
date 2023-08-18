@@ -17,11 +17,14 @@ mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api');
 const taskschema = new mongoose.Schema(
     {
         description:{
-            type:String
+            type:String,
+            unique:true,
+            require:true
         },
         completed:{
             type:Boolean,
-             default:false
+            default:false,
+            require:true
         },
         owner:{
             type: mongoose.Schema.Types.ObjectId, //store type data ie new ObjrctId('id')

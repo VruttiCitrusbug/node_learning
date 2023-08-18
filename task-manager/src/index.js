@@ -7,7 +7,9 @@ const multer = require('multer')
 const { request } = require('express')
 const app = express()
 const port = process.env.PORT || 3000
-
+const userroute = require('./router/user')
+const router = new express.Router()
+app.use(userroute)
 app.use(express.json()) // to json parser 
 
 //POST Add user success: 201 fail 400 -- user side request frame problem or 409 -- conflict with resource 
