@@ -5,3 +5,5 @@
 node_modules/
 avatar/
 images/
+
+*.env

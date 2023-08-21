@@ -77,5 +77,24 @@ mongod.exe --dbpath=C:/Users/Vrutti/Desktop/db
 cmd cd "Program Files"
 cd .\MongoDB\Server\6.0\bin\
 >mongod.exe --dbpath=C:/Users/Vrutti/Desktop/db
+https://links.mead.io/nodetest
+
 
 External Services: If you're using MongoDB Atlas or a similar cloud-based MongoDB service, the actual database server might be managed by the service provider, and you may not directly interact with the mongod.exe process. In such cases, the service handles the server-side operations.
+
+
+"scripts": {
+  "start": "node src/index.js",
+  "dev": "env-cmd ./confg/dev.env nodemon src/index.js",
+  "test": "env-cmd ./confg/test.env jest --watch"
+},
+
+
+test('should upload avatar of user',async () => {
+   const response = await request(app)
+    .post("/users/me/avatar")
+    .set('Authorization',`${userone.tokens[0].token}`)
+    .attach('avatar','/tests/fixtures/lapop1.png')
+    .expect(200)
+    console.log(response.status,"PPPPPPPPPPPP")
+})

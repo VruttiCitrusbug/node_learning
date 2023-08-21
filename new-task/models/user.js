@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+// require('dotenv').config({ path: './confg/dev.env' });
 
 const userschema = new mongoose.Schema(
     {
@@ -73,7 +74,7 @@ userschema.statics.findByCredentials = async (email,password) =>{
 userschema.methods.generateAuthToken = async function() {
     const user = this
     console.log(user._id.toString())
-    const token = await jwt.sign({_id:user._id.toString()},'thisismynewtoken', {expiresIn:'7 days'})
+    const token = await jwt.sign({_id:user._id.toString()},process.env.JWT_TOKEN, {expiresIn:'7 days'})
     console.log(token)
     user.tokens = user.tokens.concat({ token })
     console.log(user.tokens)

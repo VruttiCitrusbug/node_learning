@@ -1,32 +1,37 @@
 // DB connection
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/new-task-api');
+// const mongoose = require('mongoose');
+// mongoose.connect('mongodb://127.0.0.1:27017/new-task-api');
 
 // initiate app.listen port
-const express = require('express');
-const app = express()
+// const express = require('express');
+// const app = express()
 
 // to json parser 
-app.use(express.json()) 
+// app.use(express.json()) 
 
 //import user model and middleware to authentication
-const User = require('../models/user')
-const auth = require('../middleware/auth')
+// const User = require('../models/user')
+// const auth = require('../middleware/auth')
 
 //path to router 
-const userroute = require('./task_path')
-app.use(userroute)
+// const userroute = require('./task_path')
+// app.use(userroute)
 
-const avatarroute = require('./user_avatar_path')
-app.use(avatarroute)
+// const avatarroute = require('./user_avatar_path')
+// app.use(avatarroute)
 
-const {sendwelcome,cancelemail} = require('../emails/account')
+const express = require('express')
+const app = new express.Router()
+const auth = require('../middleware/auth')
+const User = require('../models/user')
+
+// const {sendwelcome,cancelemail} = require('../emails/account')
 
 app.post('/users',async (req, res) => {
     const user = new User(req.body)
     try{
         await user.save()
-        sendwelcome(user.name,user.email)
+        // sendwelcome(user.name,user.email)
         res.status(201).send(user)
 
     }catch(error){
@@ -77,7 +82,7 @@ app.delete('/users/:id',async (req,res)=>{
         const user = await User.findByIdAndDelete(req.params.id)
         if(!user){
             res.status(400).send({error:"user not exist."})
-            cancelemail(user.email,user.name)
+            // cancelemail(user.email,user.name)
         }
         res.send({success:"user deleted successfully."})
     }
@@ -113,7 +118,11 @@ app.patch('/users/:id',async (req,res)=>{
     }
 })
 
-const port = process.env.PORT || 3000
-app.listen(port,()=>{
-    console.log("PORT " + port)
-})
+// const port = process.env.PORT || 3000
+// app.listen(port,()=>{
+//     console.log("PORT " + port)
+// })
+
+// npm i jest
+
+module.exports = app

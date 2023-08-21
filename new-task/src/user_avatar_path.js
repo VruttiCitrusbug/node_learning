@@ -59,5 +59,18 @@ router.post('/users/me/avatar',auth,upload.single('avatar'),async (req,res) => {
 }
 )
 
-
+router.get('/avatar/me',auth,async (req,res)=>{
+    // http://localhost:3000/avatar/64df624dacd1c3400f802ff9
+    try{
+        if(!req.user.avatar){
+            throw new Error("err")
+        }
+        // res.set('Content-Type','application/json') default
+        res.set('Content-Type','image/png')
+        res.send(req.user.avatar)
+    }
+    catch(e){
+        res.status(404).send("err")
+    }
+})
 module.exports = router

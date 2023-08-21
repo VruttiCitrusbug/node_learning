@@ -13,7 +13,7 @@ router.post('/tasks',auth,(req,res)=>{
     })
 
     task.save().then(()=>{
-        res.send(task)
+        res.status(201).send(task)
 
     }).catch((e)=>{
         res.status(400).send(e)
@@ -51,7 +51,7 @@ router.get('/tasks',auth,async (req,res)=>{
 
 })
 
-router.delete('/tasks/:id',async (req,res)=>{
+router.delete('/tasks/:id',auth,async (req,res)=>{
     try{
         const task = await Task.findByIdAndDelete(req.params.id)
         if(!task){
