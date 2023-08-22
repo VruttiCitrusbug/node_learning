@@ -52,8 +52,14 @@ router.get('/tasks',auth,async (req,res)=>{
 })
 
 router.delete('/tasks/:id',auth,async (req,res)=>{
+    const task = await Task.findById(req.params.id)
+    if(req.user.id != task.owner._id){
+        return res.status(403).send({error:"unauthenticate"})
+    }
     try{
+
         const task = await Task.findByIdAndDelete(req.params.id)
+
         if(!task){
             res.status(400).send({error:"task not exist."})
         }
@@ -62,10 +68,17 @@ router.delete('/tasks/:id',auth,async (req,res)=>{
     catch(e){
         res.status(500).send({error:e})
     }
+    
 })
 
-
-router.patch('/tasks/:id',async (req,res)=>{
+router.patch('/tasks/:id',auth,async (req,res)=>{
+    const task = await Task.findById(req.params.id)
+    if(!task){
+        return res.send({error:"no task!"})
+    }
+    if(req.user.id != task.owner._id){
+        return res.status(403).send({error:"unauthenticate"})
+    }
     const updates = Object.keys(req.body)
     const allowupdates = ['completed']
     const isvalid = updates.every((update)=>{
@@ -90,5 +103,6 @@ router.patch('/tasks/:id',async (req,res)=>{
         res.status(500).send({error:e})
     }
 })
+
 
 module.exports = router

@@ -81,11 +81,39 @@ test('create task for user',async ()=>{
     expect(task).not.toBeNull()
 })
 
-test('Should delete user task',async () => {
+test('Should not delete another user task',async () => {
     const response = await request(app)
     .delete(`/tasks/${usertwo_task2._id}`)
     .set('Authorization',`${userone.tokens[0].token}`)
     .send()
+    .expect(403)
+})
+
+test('Should not delete authenticate user task',async () => {
+    const response = await request(app)
+    .delete(`/tasks/${userone_task2._id}`)
+    .set('Authorization',`${userone.tokens[0].token}`)
+    .send()
     .expect(200)
-    const task2 = await Task.findById(usertwo_task2._id)
+})
+
+test('Should not update other user tasks',async () => {
+    const response = await request(app)
+    .patch(`/tasks/${userone_task2._id}`)
+    .set('Authorization',`${userone.tokens[0].token}`)
+    .send({
+        "completed":"true"
+    })
+    .expect(200)
+    expect(response.body.completed).toBe(true)
+})
+
+test('Should not update other user tasks',async () => {
+    const response = await request(app)
+    .patch(`/tasks/${usertwo_task2._id}`)
+    .set('Authorization',`${userone.tokens[0].token}`)
+    .send({
+        "completed":"true"
+    })
+    .expect(403)
 })

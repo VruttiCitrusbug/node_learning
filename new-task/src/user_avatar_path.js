@@ -23,21 +23,21 @@ const upload = multer({
     }
 })
 
-router.get('/avatar/:id',async (req,res)=>{
-    // http://localhost:3000/avatar/64df624dacd1c3400f802ff9
-    try{
-        const user = await User.findById(req.params.id)
-        if(!user || !user.avatar){
-            throw new Error("err")
-        }
-        // res.set('Content-Type','application/json') default
-        res.set('Content-Type','image/png')
-        res.send(user.avatar)
-    }
-    catch(e){
-        res.status(404).send("err")
-    }
-})
+// router.get('/avatar/:id',async (req,res)=>{
+//     // http://localhost:3000/avatar/64df624dacd1c3400f802ff9
+//     try{
+//         const user = await User.findById(req.params.id)
+//         if(!user || !user.avatar){
+//             throw new Error("err")
+//         }
+//         // res.set('Content-Type','application/json') default
+//         res.set('Content-Type','image/png')
+//         res.send(user.avatar)
+//     }
+//     catch(e){
+//         res.status(404).send("err")
+//     }
+// })
 
 router.delete('/users/me/avatar',auth,async (req,res) => {
     req.user.avatar = undefined
