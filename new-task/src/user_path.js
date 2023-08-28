@@ -25,13 +25,13 @@ const app = new express.Router()
 const auth = require('../middleware/auth')
 const User = require('../models/user')
 
-// const {sendwelcome,cancelemail} = require('../emails/account')
+const sendwelcome = require('../emails/account')
 
 app.post('/users',async (req, res) => {
     const user = new User(req.body)
     try{
         await user.save()
-        // sendwelcome(user.name,user.email)
+        sendwelcome(user.email,user.name)
         res.status(201).send(user)
 
     }catch(error){

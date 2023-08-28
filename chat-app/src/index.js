@@ -12,30 +12,45 @@ const path = require('path');
 const publicDirectoryPath = path.join(__dirname, '../public');
 app.use(express.static(publicDirectoryPath));
 
+const Filter = require('bad-words')
+
+const {generateMessage,generateLocationMessage} = require('./utils/messages')
+
+app.use(express.static(path.join(__dirname, '../public')));
+// console.log(path.join(__dirname, '../public'))
+
 io.on('connection',(socket) => {
     // run for the each new connection
     console.log("new connection");
 
-    socket.emit('message','Welcome!')
+    // send event on client side (event name , data)
+    socket.emit('message',generateMessage('Welcome!'))
 
-    socket.on('sendmessage',(message)=>{
-        io.emit('message',message)
+    // sent to all connected user
+    socket.broadcast.emit('message',generateMessage('New user join'))
+
+    //listen on event sendmessage
+    socket.on('sendmessage',(message,callback)=>{
+
+        const filter = new Filter()
+
+        if(filter.isProfane(message)){
+            return callback('Profanity not allow')
+        }
+
+        //fire message on each connected client
+        io.emit('message',generateMessage(message))
+        callback('Delivered!')
     })
+    //listen on sendlocation event
+    socket.on('sendlocation', (getlocation,callback) => {
+        io.emit('locationmessage',generateLocationMessage(`https://www.google.com/maps?q=${getlocation.latitude},${getlocation.longitude}`))
+        callback()
+    });
 
-    socket.on('sendlocation',{
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
+    socket.on('disconnect',()=>{
+        io.emit('message',generateMessage('user left'))
     })
-    // socket.emit()
-    // //server(emit) a custom event to the client(recive an event)
-    // socket.emit('countUpdated',count);
-
-    // //at the browser side js fired event
-    // socket.on('increment', ()=>{
-    //     count++;
-    //     // socket.emit('countUpdated',count)
-    //     io.emit('countUpdated',count)
-    // })
 
     //.emit ( fire event )
     //.on (listen or receive event)
